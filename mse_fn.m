@@ -22,7 +22,7 @@ function [mse] = mse_fn(V1, V2)
 %An error will be thrown and the code will stop running if:
 %       V1 or V2 is empty
 %       The curves have no overlaping regions
-if length(V1) < 1 || length(V2) < 1
+if isempty(V1) == 1 || isempty(V2)== 1
     error('mse_fn: Inputs cannot be empty');
 end
 if min(V1(1,:)) >= min(V2(1,:))             %Determine the minimum value to check
