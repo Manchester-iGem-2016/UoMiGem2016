@@ -29,7 +29,7 @@ S714 = xlsread(filename) ;
     concABTSOX = S714(2:r1,1); % in ug/ml
     % but whats important is amount of particles for consistency with codes.
     % therefore must divide by mr abts
-    concABTSOX = concABTSOX/548.7
+    concABTSOX = concABTSOX/548.7 % now in mM
     
     % to do 
     % take into account decay
