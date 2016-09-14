@@ -18,7 +18,8 @@ K(9,:) = randlog_fn(BinNumber,round(FractionSample*Iterations),Kstruct.keq2);
 K(10,:) = randlog_fn(BinNumber,round(FractionSample*Iterations),Kstruct.km1p2);
 
 %constraint = randlogconstraint_fn(BinNumber, round(FractionSample*Iterations), Kconstraints);
-
+% created lognormal distributions for all perameters and constraints (constraint returns 2 points per constraint soo high and too low.
+% all left in for future reference
 
 %Kcatf1 = K(7,:);
 %Kcatb2 = K(8,:);
