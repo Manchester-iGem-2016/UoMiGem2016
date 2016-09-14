@@ -1,5 +1,6 @@
 function [ Kconstraints ] = randlogconstraint_fn( BinNumber , Iterations , K )
 % Generates a high and low value for the constraints
+% works like a normal randlog apart from two values, see randlog for detail.
 %Generating an input function (density curve)
 %K = [1,2,3,4,5,6,7,8,9,10];
 %Iterations = 10000;
