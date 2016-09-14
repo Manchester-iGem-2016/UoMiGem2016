@@ -65,7 +65,7 @@ for j = 1:Iterations
     semisum = bin_areas(1);
     for i = 1:BinNumber                          
         if semisum > r                              
-            istore = i + (bin_areas(i)*rand());                         
+            istore = i;                         
             break
         else
             semisum = semisum + bin_areas(i);   
@@ -74,4 +74,4 @@ for j = 1:Iterations
     istorevector(j) = istore;  
 end
 
-istorevectortv  = istorevector .* binsize ;
+istorevectortv  = istorevector .* binsize  + (binsize.*rand());
