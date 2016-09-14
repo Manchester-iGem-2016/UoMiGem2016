@@ -8,10 +8,11 @@ clc
 
 % step 1 - read in data ov....
 filename = 'samples.xlsx' ;
+
 S714 = xlsread(filename) ; 
 [r1,c1] = size(S714);
 % put in a test to find decay point and stuff
-
+texp = S714(1,4:c1);
 % steady state absorbances
 
     S0 = S714(2:r1,c1);
@@ -29,7 +30,7 @@ S714 = xlsread(filename) ;
     concABTSOX = S714(2:r1,1); % in ug/ml
     % but whats important is amount of particles for consistency with codes.
     % therefore must divide by mr abts
-    concABTSOX = concABTSOX/548.7 % now in mM
+    concABTSOX = concABTSOX/548.7; % now in mM
     
     % to do 
     % take into account decay
@@ -44,23 +45,7 @@ S714 = xlsread(filename) ;
     
     updated = (S714 - P1(2))./P1(1);
     
-    
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
+    save('experimental.mat','texp','updated')
     
     
     
