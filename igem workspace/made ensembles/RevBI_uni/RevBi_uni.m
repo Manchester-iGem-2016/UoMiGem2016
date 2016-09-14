@@ -1,6 +1,6 @@
 %Main script.
-%Calls other functions etc
-
+% solves our system using reversible michealis followed by Bi_uni
+% see the wiki for what this corresponds to logically
 % clean slate protocol
 clc
 clear
@@ -27,34 +27,32 @@ km1p2 = load('Kmp(HRP)');                 km1p2 = km1p2.Kfinal ;
 %Kcatb2 = load('Kcatb(HRP)');             Kcat2b = Kcat2b.Kfinal; %-60.831757 kcal/mol
 Kconstraints = exp(60.831757e3./(R.*Temprange));
 
-
-% generating random sample k's and putting them in a matrix km
-% km = zeros(4,Iterations);
-
-
 Kstruct = struct('kcatf1',kcatf1,'km1s1',km1s1,'keq1',keq1,'km1p1',km1p1,'kcatf2',kcatf2,'km1s2',km1s2,'km2s2',km2s2,'keq2',keq2,'km1p2',km1p2);
-
+% using a struct to write out variables fo neatness in following function
 km = ConstraintFilter_fn(Kstruct, Kconstraints ,Iterations, BinNumber);
-
-
-%part 1.2 input data for experimental concentration graphs
-Texp = [0,2.5,5.81,7.146,10,13,16,17.5,20.5,25,28,31,34,37,40,44.5,49,52,55,60]; 
-Yexp = [0.0001,0.11,0.21,0.24,0.29,0.32,0.34,0.34,0.331,0.30,0.28,0.25,0.22,0.19,0.16,0.12,0.09,0.07,0.06,0.04];
-
-tRange = [1:578]; % set up range for t
-yZero = [0.00001,0.000001,83.333,83.333,10,0.00001]; % and an initial condition
-yZero(3) = (yZero(3)/34.0147);
-yZero(4) = (yZero(4)/44000);
-yZero(5) = (yZero(5)/548.7) ;
-store = zeros(length(tRange), 6, Iterations);
+% This function creates our log normal distributions for our parameters using only values that are consistent with constraints
+tRange = [1:578]; % set up range for t in seconds
+yZero = [0.00001,0.00001,83.3333,83.3333,16.6666,0.00001]; % and an initial condition units ug/ml % the 0.00001's are to stop division by 0
+% these correspond to alcohol,AOX,H2O2,HRP,ABTS,ABTS(oxidised)
+%the units where in ug/ml, but what matters is the number of particles per volume
+% so want e.g. mol/ml. 
+% Mr's glucose set  g/mol  
+Mr = [180,150000,34,44000,514,514] ; 
+% Mr's alcohol set  g/mol
+%Mr = [46,450000,34,44000,514] ; 
+% so divide ic's by mr's and get umol/ml = mmol/litre = mM
+for i = 1:length(Mr)
+yZero(i) = (yZero(i)/Mr(i)); 
+end
+store = zeros(length(tRange), length(yZero), Iterations); % matrix to store concentrations over time from ode solve
 for i = 1:Iterations  
 % solve Odes fo given k set
-kv = km(:,i);
+kv = km(:,i); % extract a k set
 [myT, myY] = ode45(@(t,Y)RHSRevBi_uni(t,Y,kv), tRange, yZero);
-store(:,:,i) = myY(:,:);
+store(:,:,i) = myY(:,:); % store concentrations and time for each iteration
 end
 MM = struct('Time', myT, 'Concentrations', store, 'InitialConcentrations', yZero, 'Iterations', Iterations, 'Ks', km);
-
+% save all important variables in a struct for use elsewhere
 c = clock;
 year = num2str(c(1));
 month = num2str(c(2));
@@ -64,4 +62,5 @@ minute = num2str(c(5));
 
 title = [day,'-',month,'-',year,'_','MM','_','(',hour, minute,')']; 
 save(title,'MM')
+% save with file name title = date and time for ease. 
 toc
