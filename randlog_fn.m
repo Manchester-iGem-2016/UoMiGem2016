@@ -74,4 +74,4 @@ for j = 1:Iterations
     istorevector(j) = istore;  
 end
 
-istorevectortv  = istorevector .* binsize  + (binsize.*rand());
+istorevectortv  = istorevector .* binsize  + (binsize.*(rand()-rand()));
